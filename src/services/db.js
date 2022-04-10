@@ -51,7 +51,8 @@ const createTables = () => {
         address VARCHAR(255),
         phone_number VARCHAR(30),
         PRIMARY KEY (id),
-        CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) 
+        CONSTRAINT uk_username UNIQUE (username),
+        CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
   )`;
 
   const insertRole = "INSERT INTO role (id, name) VALUES(?)";
@@ -77,7 +78,7 @@ function execQuery(query, queryName, values, callback) {
       }
 
       let message = `Query ${queryName} run successfully`;
-      console.log(results);
+      // console.log(results);
       console.log(message);
       pool.end();
       callback(message);
@@ -95,7 +96,7 @@ function execQuery(query, queryName, values, callback) {
     }
 
     let message = `Query ${queryName} run successfully`;
-    console.log(results);
+    // console.log(results);
     console.log(message);
     pool.end();
     callback(message);

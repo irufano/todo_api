@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const todoRouter = require("./src/routes/todo.routes");
+const authRouter = require("./src/routes/auth.routes");
 const AppError = require("./src/utils/appError");
 const errorHandler = require("./src/utils/errorHandler");
 var corsOptions = {
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* ROUTER */
 todoRouter(app);
+authRouter(app);
 
 /* ERROR HANDLER */
 app.all("*", (req, res, next) => {

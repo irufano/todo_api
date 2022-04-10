@@ -9,6 +9,8 @@ const todoRoutes = (app) => {
   router.route("/:id").get(controller.getTodo);
   router.route("/:id").put(controller.updateTodo);
   router.route("/:id").delete(controller.deleteTodo);
+
+  // handle not allowed method
   router.route("/").all((req, res, next) => {
     return next(new AppError("Method not allowed", 405));
   });

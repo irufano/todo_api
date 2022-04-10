@@ -9,7 +9,7 @@ class Todo {
   static getAllTodos = (result) => {
     let query = "SELECT * FROM todo";
     pool.query(query, function (err, data, fields) {
-      if (err) return result(null, err);
+      if (err) return result(err, null);
       result(null, data);
     });
   };
@@ -19,7 +19,7 @@ class Todo {
     let query = "INSERT INTO todo (name, status) VALUES(?)";
     let values = [name, "pending"];
     pool.query(query, [values], function (err, data, fields) {
-      if (err) return result(null, err);
+      if (err) return result(err, null);
       result(null, data);
     });
   };
@@ -28,7 +28,7 @@ class Todo {
   static getTodo = (id, result) => {
     let query = "SELECT * FROM todo WHERE id = ?";
     pool.query(query, [id], function (err, data, fields) {
-      if (err) return result(null, err);
+      if (err) return result(err, null);
       result(null, data);
     });
   };
@@ -37,7 +37,7 @@ class Todo {
   static updateTodo = (id, result) => {
     let query = "UPDATE todo SET status='completed' WHERE id = ?";
     pool.query(query, [id], function (err, data, fields) {
-      if (err) return result(null, err);
+      if (err) return result(err, null);
       result(null, data);
     });
   };
@@ -46,7 +46,7 @@ class Todo {
   static deleteTodo = (id, result) => {
     let query = "DELETE FROM todo WHERE id = ?";
     pool.query(query, [id], function (err, data, fields) {
-      if (err) return result(null, err);
+      if (err) return result(err, null);
       result(null, data);
     });
   };

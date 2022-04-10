@@ -6,8 +6,8 @@ exports.findAll = (req, res, next) => {
     if (err) return next(new AppError(err));
     res.status(200).json({
       status: "success",
-      length: data?.length,
       data: data,
+      info: null,
     });
   });
 };
@@ -19,7 +19,8 @@ exports.createTodo = (req, res, next) => {
     if (err) return next(new AppError(err, 500));
     res.status(201).json({
       status: "success",
-      message: "Todo created!",
+      data: "Todo created!",
+      info: null,
     });
   });
 };
@@ -27,11 +28,20 @@ exports.createTodo = (req, res, next) => {
 exports.getTodo = (req, res, next) => {
   if (!req.params.id) return next(new AppError("No todo id found", 404));
   Todo.getTodo(req.params.id, (err, data, fields) => {
+    let info;
     if (err) return next(new AppError(err, 500));
+    if (data.length === 0) {
+      info = {
+        message: "Todo not found",
+        messageEn: null,
+        messageId: null,
+        field: null,
+        redirect: null,
+      };
+    }
     res.status(200).json({
       status: "success",
-      // data: data[0] || null,
-      data: data.map(function (value) {
+      data: data.map(function (value, index) {
         return {
           id: value.id,
           name: value.name,
@@ -39,6 +49,7 @@ exports.getTodo = (req, res, next) => {
           createdDate: value.date_created,
         };
       }),
+      info: info || null,
     });
   });
 };
@@ -49,7 +60,8 @@ exports.updateTodo = (req, res, next) => {
     if (err) return next(new AppError(err, 500));
     res.status(201).json({
       status: "success",
-      message: "Todo updated!",
+      data: "Todo updated!",
+      info: null,
     });
   });
 };
@@ -60,7 +72,8 @@ exports.deleteTodo = (req, res, next) => {
     if (err) return next(new AppError(err, 500));
     res.status(201).json({
       status: "success",
-      message: "Todo deleted!",
+      data: "Todo deleted!",
+      info: null,
     });
   });
 };
