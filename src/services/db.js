@@ -34,19 +34,33 @@ const createTables = () => {
         PRIMARY KEY (id)
   )`;
 
-  pool.query(todoTable, (error, results) => {
+  const roleTable = `CREATE TABLE role   
+  (
+        id int NOT NULL,
+        name varchar(50) NOT NULL
+  )`;
+
+  queryExecution(todoTable, "todo", (message) => {});
+  queryExecution(roleTable, "role", (message) => {});
+};
+
+function queryExecution(query, tableName, callback) {
+  pool.query(query, (error, results) => {
     if (error) {
       console.error(error);
       console.error(error.sqlMessage);
       pool.end();
+      callback(error.sqlMessage);
       return;
     }
 
+    var message = `Table ${tableName} created successfully`;
     console.log(results);
-    console.log("Tables created successfully");
+    console.log(message);
     pool.end();
+    callback(message);
   });
-};
+}
 
 module.exports = {
   pool,

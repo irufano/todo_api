@@ -13,7 +13,8 @@ exports.findAll = (req, res, next) => {
 };
 
 exports.createTodo = (req, res, next) => {
-  if (!req.body) return next(new AppError("No form data found", 404));
+  if (Object.keys(req.body).length === 0)
+    return next(new AppError("No raw data found", 404));
   Todo.createTodo(req.body.name, (err, data) => {
     if (err) return next(new AppError(err, 500));
     res.status(201).json({
