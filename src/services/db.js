@@ -36,15 +36,40 @@ const createTables = () => {
 
   const roleTable = `CREATE TABLE role   
   (
-        id int NOT NULL,
+        id int NOT NULL PRIMARY KEY,
         name varchar(50) NOT NULL
   )`;
 
-  queryExecution(todoTable, "todo", (message) => {});
-  queryExecution(roleTable, "role", (message) => {});
+  const insertRole = "INSERT INTO role (id, name) VALUES(?)";
+
+  execQuery(todoTable, "create todo", null, (message) => {});
+  execQuery(roleTable, "create role", null, (message) => {});
+
+  execQuery(insertRole, "insert role", [1, "super_admin"], (message) => {});
+  execQuery(insertRole, "insert role", [2, "admin"], (message) => {});
+  execQuery(insertRole, "insert role", [3, "user"], (message) => {});
 };
 
-function queryExecution(query, tableName, callback) {
+function execQuery(query, queryName, values, callback) {
+  if (values != null) {
+    pool.query(query, [values], (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        console.error(error.sqlMessage);
+        pool.end();
+        callback(error.sqlMessage);
+        return;
+      }
+
+      let message = `Query ${queryName} run successfully`;
+      console.log(results);
+      console.log(message);
+      pool.end();
+      callback(message);
+    });
+    return;
+  }
+
   pool.query(query, (error, results) => {
     if (error) {
       console.error(error);
@@ -54,7 +79,7 @@ function queryExecution(query, tableName, callback) {
       return;
     }
 
-    var message = `Table ${tableName} created successfully`;
+    let message = `Query ${queryName} run successfully`;
     console.log(results);
     console.log(message);
     pool.end();
