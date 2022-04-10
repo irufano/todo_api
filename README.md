@@ -2,5 +2,5 @@
 
 Stack: 
 - expressjs, 
-- mysql 
+- mysql  
 - jwt.
