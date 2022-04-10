@@ -24,7 +24,7 @@ pool.getConnection((err, connection) => {
 });
 
 const createTables = () => {
-  console.log("-- CREATE TABLE SCRIPT @createTables --");
+  console.log("-- QUERY SCRIPT @createTables --");
   const todoTable = `CREATE TABLE todo   
   (
         id int NOT NULL AUTO_INCREMENT,
@@ -40,10 +40,25 @@ const createTables = () => {
         name varchar(50) NOT NULL
   )`;
 
+  const userTable = `CREATE TABLE user   
+  (
+        id VARCHAR(36) NOT NULL,
+        role_id int NOT NULL,
+        username VARCHAR(20) NOT NULL,
+        email VARCHAR(20) NOT NULL,
+        password VARCHAR(16) NOT NULL,
+        fullname VARCHAR(50) NOT NULL,
+        address VARCHAR(255),
+        phone_number VARCHAR(30),
+        PRIMARY KEY (id),
+        CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) 
+  )`;
+
   const insertRole = "INSERT INTO role (id, name) VALUES(?)";
 
   execQuery(todoTable, "create todo", null, (message) => {});
   execQuery(roleTable, "create role", null, (message) => {});
+  execQuery(userTable, "create user", null, (message) => {});
 
   execQuery(insertRole, "insert role", [1, "super_admin"], (message) => {});
   execQuery(insertRole, "insert role", [2, "admin"], (message) => {});
@@ -54,8 +69,8 @@ function execQuery(query, queryName, values, callback) {
   if (values != null) {
     pool.query(query, [values], (error, results, fields) => {
       if (error) {
-        console.error(error);
-        console.error(error.sqlMessage);
+        // console.error(error);
+        console.error(`${queryName} error: ${error.sqlMessage}`);
         pool.end();
         callback(error.sqlMessage);
         return;
@@ -72,8 +87,8 @@ function execQuery(query, queryName, values, callback) {
 
   pool.query(query, (error, results) => {
     if (error) {
-      console.error(error);
-      console.error(error.sqlMessage);
+      // console.error(error);
+      console.error(`${queryName} error: ${error.sqlMessage}`);
       pool.end();
       callback(error.sqlMessage);
       return;
