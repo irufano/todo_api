@@ -5,11 +5,18 @@ const authRoutes = (app) => {
   const AppError = require("../utils/appError");
 
   router
-    .route("/register")
-    .post(controller.validate("createUser"), controller.createUser);
+    .route("/signup")
+    .post(controller.validate("register"), controller.register);
+  router.route("/signin").post(controller.validate("login"), controller.login);
+  router
+    .route("/refresh-token")
+    .post(controller.validate("refresh-token"), controller.refreshToken);
 
   // handle not allowed method
-  router.route("/register").all((req, res, next) => {
+  router.route("/signup").all((req, res, next) => {
+    return next(new AppError("Method not allowed", 405));
+  });
+  router.route("/signin").all((req, res, next) => {
     return next(new AppError("Method not allowed", 405));
   });
 

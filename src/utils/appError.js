@@ -3,6 +3,7 @@ class AppError extends Error {
     msg,
     statusCode,
     {
+      id = null,
       data = null,
       messageEn = null,
       messageId = null,
@@ -17,6 +18,7 @@ class AppError extends Error {
     this.isOperational = true;
     this.data = data;
     this.info = {
+      id: id || null,
       message: this.message || null,
       messageEn: messageEn || this.message,
       messageId: messageId || this.message,

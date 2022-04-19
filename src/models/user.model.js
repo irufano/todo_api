@@ -13,15 +13,6 @@ class User {
     this.phone_number = user.phone_number;
   }
 
-  /* GET ALL USERS */
-  static getAllUser = (result) => {
-    let query = "SELECT * FROM user";
-    pool.query(query, function (err, data, fields) {
-      if (err) return result(null, err);
-      result(null, data);
-    });
-  };
-
   /* CREATE USER */
   static createUser = (roleId, username, email, password, fullname, result) => {
     let uuid = uuidv4();
@@ -29,6 +20,24 @@ class User {
       "INSERT INTO user (id, role_id, username, email, password, fullname) VALUES(?)";
     let values = [uuid, roleId, username, email, password, fullname];
     pool.query(query, [values], function (err, data, fields) {
+      if (err) return result(err, null);
+      result(null, data);
+    });
+  };
+
+  /* GET USER */
+  static getUser = (username, result) => {
+    let query = "SELECT * FROM user WHERE username = ? LIMIT 1";
+    pool.query(query, [username], function (err, data, fields) {
+      if (err) return result(err, null);
+      result(null, data);
+    });
+  };
+
+   /* GET USER BY ID */
+   static getUserById = (id, result) => {
+    let query = "SELECT * FROM user WHERE id = ? LIMIT 1";
+    pool.query(query, [id], function (err, data, fields) {
       if (err) return result(err, null);
       result(null, data);
     });

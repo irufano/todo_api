@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const dbConfig = require("./db.config");
+const dbConfig = require("../configs/db.config");
 
 // const connection = mysql.createConnection({
 //   host: dbConfig.HOST,
@@ -46,7 +46,7 @@ const createTables = () => {
         role_id int NOT NULL,
         username VARCHAR(20) NOT NULL,
         email VARCHAR(20) NOT NULL,
-        password VARCHAR(16) NOT NULL,
+        password VARCHAR(255) NOT NULL,
         fullname VARCHAR(50) NOT NULL,
         address VARCHAR(255),
         phone_number VARCHAR(30),
