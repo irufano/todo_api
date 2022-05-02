@@ -43,7 +43,6 @@ const createTables = () => {
   const userTable = `CREATE TABLE user   
   (
         id VARCHAR(36) NOT NULL,
-        role_id int NOT NULL,
         username VARCHAR(20) NOT NULL,
         email VARCHAR(20) NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -51,8 +50,15 @@ const createTables = () => {
         address VARCHAR(255),
         phone_number VARCHAR(30),
         PRIMARY KEY (id),
-        CONSTRAINT uk_username UNIQUE (username),
-        CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
+        CONSTRAINT uk_username UNIQUE (username)
+  )`;
+
+  const userRoleTable = `CREATE TABLE user_role   
+  (
+        user_id VARCHAR(36) NOT NULL,
+        role_id int NOT NULL,
+        CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+        CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
   )`;
 
   const insertRole = "INSERT INTO role (id, name) VALUES(?)";
@@ -60,6 +66,7 @@ const createTables = () => {
   execQuery(todoTable, "create todo", null, (message) => {});
   execQuery(roleTable, "create role", null, (message) => {});
   execQuery(userTable, "create user", null, (message) => {});
+  execQuery(userRoleTable, "create user_role", null, (message) => {});
 
   execQuery(insertRole, "insert role", [1, "super_admin"], (message) => {});
   execQuery(insertRole, "insert role", [2, "admin"], (message) => {});

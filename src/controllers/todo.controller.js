@@ -21,7 +21,6 @@ exports.createTodo = (req, res, next) => {
 exports.getTodo = (req, res, next) => {
   if (!req.params.id) return next(new AppError("No todo id found", 404));
   Todo.getTodo(req.params.id, (err, data, fields) => {
-    let info;
     if (err) return next(new AppError(err, 500));
     if (data.length === 0) {
       return next(new AppError("Todo not found", 200, { data: [] }));
